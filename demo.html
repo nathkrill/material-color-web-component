@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label>
+        <input type="checkbox" name="dark" />
+        toggle dark/light mode
+    </label>
+    <button id="reload">reload image</button>
+    <dynamic-color global>
+        <div>
+            <img src="https://picsum.photos/1000/500" />
+            <h2>Heading</h2>
+        </div>
+        <article class="surface">
+            <h3>Heading</h3>
+            <p>Some more text</p>
+            <button>Button</button>
+        </article>
+    </dynamic-color>
+    <style>
+        * {
+            transition: all 0.15s ease-in-out;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            accent-color: var(--md-sys-color-primary);
+        }
+        dynamic-color {
+            display: block;
+            height: max-content;
+            max-width: 768px;
+            margin: 0 auto;
+        }
+        dynamic-color img {
+            display:block;
+            max-width: 100%;
+            border-top-right-radius: 2em;
+            border-top-left-radius: 2em;
+        }
+        dynamic-color > div {
+            display: grid;
+            place-items: center;
+        }
+        dynamic-color h2 {
+            padding: 0.2em 1em;
+            border-radius: 999px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+        }
+        dynamic-color > div :where(h2,img) {
+            grid-area: 1/1;
+        }
+        .surface {
+            padding: 2em 1em; 
+            border-radius: 2em;
+            background-color: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: -2em;
+            position: relative;
+        }
+        .surface h2 {
+            margin-top: 0;
+        }
+        button {
+            -webkit-appearance: none;
+            font: inherit;
+            border: none;
+            border-radius: 999px;
+            padding: 1em 1.5em;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+        }
+        input,label {
+            font:inherit;
+        }
+    </style>
+    <script src="./index.min.js"></script>
+    <script>
+        const checkbox = document.querySelector('[name="dark"]')
+        const colorEl = document.querySelector('dynamic-color')
+        checkbox.addEventListener('change', e => {
+            if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                colorEl.toggleAttribute('light')
+            } else {
+                colorEl.toggleAttribute('dark')
+            }
+        })
+
+        const reloadButton = document.querySelector('#reload')
+        const imgSource = document.querySelector('img')
+        reloadButton.addEventListener('click', () => {
+            imgSource.src = `https://picsum.photos/1000/500?${new Date().getTime()}`
+            colorEl.refresh()
+        })
+    </script>
+</body>
+</html>

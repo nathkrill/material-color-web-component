@@ -1,0 +1,22 @@
+{
+  "name": "material-color-web-component",
+  "version": "1.0.0",
+  "description": "Web component for easily applying Material Dynamic Color in CSS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "develop": "webpack build --mode=development -w",
+    "build": "webpack build --mode=production"
+  },
+  "author": "nathan.akrill@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "@material/material-color-utilities": "^0.2.5",
+    "lit": "^2.7.2",
+    "material-dynamic-colors": "^0.1.7"
+  },
+  "devDependencies": {
+    "webpack": "^5.80.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
