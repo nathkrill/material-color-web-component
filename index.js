@@ -1,6 +1,21 @@
 import {LitElement, css, html} from 'lit';
 import {themeFromImage,argbFromHex,argbFromRgb, themeFromSourceColor, applyTheme} from '@material/material-color-utilities'
 
+
+function rgbToObj(rgb) {
+  
+    let colors = ["red", "green", "blue", "alpha"]
+  
+    let colorArr = rgb.replace(/[^\d,]/g, '').split(',');
+  
+    let obj = new Object();
+  
+    colorArr.forEach((k, i) => {
+        obj[colors[i]] = parseInt(k)
+    })
+  
+    return obj;
+}
 export class DynamicColor extends LitElement {
     static properties = {
         sourceImage: {
@@ -26,7 +41,7 @@ export class DynamicColor extends LitElement {
         global: {
             type: Boolean,
             reflect: true
-        }
+        },
     }
 
     _checkColorScheme() {
@@ -67,7 +82,8 @@ export class DynamicColor extends LitElement {
     }
 
     async _setColorsFromRgb() {
-        const theme = themeFromSourceColor(argbFromRgb(this.sourceRgb))
+        const rgbObj = rgbToObj(this.sourceRgb)
+        const theme = themeFromSourceColor(argbFromRgb(rgbObj.red,rgbObj.green,rgbObj.blue))
         this._applyTheme(theme)
     }
 
