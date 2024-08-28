@@ -1,5 +1,5 @@
 import {LitElement, css, html} from 'lit';
-import {themeFromImage,argbFromHex,argbFromRgb, themeFromSourceColor, applyTheme} from '@material/material-color-utilities'
+import {themeFromImage,argbFromHex,argbFromRgb, themeFromSourceColor, applyTheme,Hct} from '@material/material-color-utilities'
 
 
 function rgbToObj(rgb) {
@@ -27,6 +27,10 @@ export class DynamicColor extends LitElement {
             reflect: true
         },
         sourceRgb: {
+            type: String,
+            reflect: true
+        },
+        sourceHct: {
             type: String,
             reflect: true
         },
@@ -59,7 +63,7 @@ export class DynamicColor extends LitElement {
     _applyTheme(theme) {
         applyTheme(theme,{
             dark: this.darkMode,
-            target: this.global ? document.body : this
+            target: this.global ? document.querySelector('html') : this
         })
     }
 
@@ -87,12 +91,20 @@ export class DynamicColor extends LitElement {
         this._applyTheme(theme)
     }
 
+    async _setColorsFromHct() {
+        const hctObj = JSON.parse(this.sourceHct)
+        const hctProper = Hct.from(hctObj.hue,hctObj.chroma,hctObj.tone)
+        const theme = themeFromSourceColor(hctProper.toInt())
+        this._applyTheme(theme)
+    }
 
     _setColors() {
         this._checkColorScheme()
         try {
             if (this.sourceImage) {
                 this._setColorsFromImage()
+            } else if (this.sourceHct) {
+                this._setColorsFromHct()
             } else if (this.sourceHex) {
                 this._setColorsFromHex()
             } else if (this.sourceRgb) {
@@ -129,4 +141,10 @@ export class DynamicColor extends LitElement {
     }
 }
 
-customElements.define('dynamic-color', DynamicColor)
+export function registerDynamicColor() {
+    if (customElements.get( 'dynamic-color' ) === undefined) {
+        customElements.define('dynamic-color', DynamicColor)
+    }
+}
+
+registerDynamicColor()
